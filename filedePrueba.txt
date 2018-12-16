@@ -1,0 +1,25 @@
+import urllib.parse
+import urllib.request
+import json
+
+serviceurl='http://maps.googleapis.com/maps/api/geocode/json?'
+while True:
+    address = input('Entrar ciudad: ')
+    if len(address) < 1: break
+    url = serviceurl + urllib.parse.urlencode({'sensor':'false','address':address})
+    print ('Recuperando', url)
+    uh = urllib.request.urlopen(url)
+    data = uh.read()
+    print ('Recuperados',len(data),'caracteres')
+    try: js = json.loads(data)
+    except: js = None
+    if "status" not in js or js['status'] !='OK':
+        print ('=== FAllo de recuperacion ===')
+        print(data)
+        continue
+    print (json.dumps(js, indent=4))
+    lat = js["results"][0]["geometry"]["location"]["lat"]
+    lnf = js["results"][0]["geometry"]["location"]["lng"]
+    print ('lat:',lat,'lng:',lng)
+    location = js ['results'][0]['formated_address']
+    print (location)
